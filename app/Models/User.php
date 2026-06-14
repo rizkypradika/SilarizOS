@@ -4,16 +4,18 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
+use Filament\TeamChat\Concerns\HasTeamChat;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles, HasTeamChat;
 
     /**
      * The attributes that are mass assignable.
@@ -25,6 +27,7 @@ class User extends Authenticatable implements FilamentUser
         'email',
         'password',
         'role',
+        'balance',
     ];
 
     /**
@@ -58,11 +61,11 @@ class User extends Authenticatable implements FilamentUser
         }
 
         if ($panel->getId() === 'admin') {
-            return $this->role === 'owner';
+            return $this->hasRole(['admin', 'super_admin']);
         }
 
         if ($panel->getId() === 'customer') {
-            return $this->role === 'customer' || $this->role === 'owner';
+            return $this->hasRole(['customer', 'admin', 'super_admin']);
         }
 
         return false;

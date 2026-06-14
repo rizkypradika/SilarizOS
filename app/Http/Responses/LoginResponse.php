@@ -12,8 +12,12 @@ class LoginResponse implements LoginResponseContract
     {
         $user = auth()->user();
 
-        $fallbackUrl = $user->role === 'owner' ? '/admin' : '/customer';
+        if ($user->hasRole('admin')) {
+            return redirect()->intended('/admin');
+        } elseif ($user->hasRole('customer')) {
+            return redirect()->intended('/customer');
+        }
 
-        return redirect()->intended($fallbackUrl);
+        return redirect()->intended('/customer');
     }
 }

@@ -1,0 +1,214 @@
+/* Thin Scrollbars */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: #c1121f;
+    border-radius: 10px;
+}
+.dark ::-webkit-scrollbar-thumb {
+    background: #334155;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+}
+
+/* Sidebar Customizations */
+.fi-sidebar {
+    background-color: #f8fafc !important; /* Light gray for light mode */
+    border-right: 1px solid #e2e8f0;
+}
+.dark .fi-sidebar {
+    background-color: #0b0f19 !important; /* Very dark for dark mode */
+    border-right: 1px solid #1e293b;
+}
+
+/* Sidebar Items Base Shapes */
+.fi-sidebar-item > a,
+.fi-sidebar-item > button,
+.fi-sidebar-group > button {
+    border-radius: 0.75rem !important; /* squircle-like rounded */
+    transition: all 0.2s ease-in-out;
+}
+
+/* Custom Active State for Sidebar Items */
+.fi-sidebar-item.fi-active > a,
+.fi-sidebar-item.fi-active > button {
+    background-color: #c1121f !important; /* Red for light mode */
+    color: #ffffff !important; /* White for text */
+    border-radius: 9999px !important; /* Full rounded pill shape */
+    transition: all 0.3s ease;
+}
+
+.fi-sidebar-item.fi-active > a .fi-sidebar-item-icon,
+.fi-sidebar-item.fi-active > a svg,
+.fi-sidebar-item.fi-active > a .fi-sidebar-item-label,
+.fi-sidebar-item.fi-active > button .fi-sidebar-item-icon,
+.fi-sidebar-item.fi-active > button svg,
+.fi-sidebar-item.fi-active > button .fi-sidebar-item-label {
+    color: #ffffff !important; /* White for icon and text */
+}
+
+/* Dark mode specific */
+.dark .fi-sidebar-item.fi-active > a,
+.dark .fi-sidebar-item.fi-active > button {
+    background-color: #1e293b !important;
+    color: #f8fafc !important;
+}
+
+.dark .fi-sidebar-item.fi-active > a .fi-sidebar-item-icon,
+.dark .fi-sidebar-item.fi-active > a svg,
+.dark .fi-sidebar-item.fi-active > a .fi-sidebar-item-label,
+.dark .fi-sidebar-item.fi-active > button .fi-sidebar-item-icon,
+.dark .fi-sidebar-item.fi-active > button svg,
+.dark .fi-sidebar-item.fi-active > button .fi-sidebar-item-label {
+    color: #818cf8 !important;
+}
+
+/* Hover States for Inactive Items */
+.fi-sidebar-item:not(.fi-active) > a:hover,
+.fi-sidebar-item:not(.fi-active) > button:hover {
+    background-color: #f1f5f9 !important;
+}
+.dark .fi-sidebar-item:not(.fi-active) > a:hover,
+.dark .fi-sidebar-item:not(.fi-active) > button:hover {
+    background-color: #1e293b !important;
+}
+
+/* Hover States for Active Items */
+.fi-sidebar-item.fi-active > a:hover,
+.fi-sidebar-item.fi-active > button:hover {
+    background-color: #a00f1a !important; /* Darker red for light mode */
+}
+.dark .fi-sidebar-item.fi-active > a:hover,
+.dark .fi-sidebar-item.fi-active > button:hover {
+    background-color: #0f172a !important; /* Darker slate for dark mode */
+}
+
+/* =========================================
+   Advanced Floating Layout (Reference Match)
+   ========================================= */
+
+/* Floating Sidebar */
+@media (min-width: 1024px) {
+    .fi-sidebar {
+        position: sticky !important;
+        top: 0 !important;
+        margin: 0 !important;
+        height: 100vh !important;
+        border-radius: 0 1.5rem 1.5rem 0 !important;
+        border: none !important;
+        box-shadow: 10px 0 25px -5px rgb(0 0 0 / 0.1), 5px 0 10px -6px rgb(0 0 0 / 0.1) !important;
+        overflow: hidden !important;
+        z-index: 40 !important;
+    }
+}
+
+/* Hide native Filament sidebar collapse button at the bottom */
+.fi-sidebar-nav-collapse-btn {
+    display: none !important;
+}
+.fi-topbar {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    position: fixed !important;
+    width: auto !important;
+    top: 1.5rem !important;
+    right: 2rem !important;
+    left: auto !important;
+    z-index: 50 !important;
+}
+.fi-topbar nav {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+/* Hide left side of topbar (native hamburger & breadcrumbs) */
+.fi-topbar .fi-topbar-start {
+    display: none !important;
+}
+
+/* Make right side of topbar (profile, deposit) a floating pill */
+.fi-topbar .fi-topbar-end {
+    background-color: #ffffff !important;
+    border-radius: 9999px !important; /* fully rounded pill */
+    padding: 0.5rem 1rem !important;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 1rem !important;
+    border: 1px solid #f1f5f9 !important;
+}
+.dark .fi-topbar .fi-topbar-end {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+/* Ensure the main layout compensates for the floating sidebar */
+.fi-layout > main {
+    padding-top: 5rem !important; /* Give top spacing since topbar is gone */
+}
+
+/* Make sure the main content is readable under the floating elements */
+.fi-main {
+    max-width: 100% !important;
+}
+
+/* =========================================
+   Custom Table Tabs (Match Active Sidebar)
+   ========================================= */
+
+/* Remove default underline and spacing */
+.fi-tabs-item {
+    transition: all 0.2s ease-in-out !important;
+}
+
+/* Tabs Container: Full Pill */
+.fi-tabs {
+    border-radius: 9999px !important;
+    padding: 0.25rem !important; /* Add some padding so the pills inside look good */
+}
+
+/* Active Tab: Red Pill */
+.fi-tabs-item.fi-active,
+.fi-tabs-item[aria-selected="true"] {
+    background-color: #c1121f !important; /* Red for light mode */
+    color: #ffffff !important; /* White for text */
+    border-radius: 9999px !important; /* Full rounded pill shape */
+    border-bottom: none !important;
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+    box-shadow: none !important;
+}
+
+.fi-tabs-item.fi-active .fi-tabs-item-label,
+.fi-tabs-item.fi-active svg,
+.fi-tabs-item[aria-selected="true"] .fi-tabs-item-label,
+.fi-tabs-item[aria-selected="true"] svg {
+    color: #ffffff !important;
+}
+
+/* Dark mode specific */
+.dark .fi-tabs-item.fi-active,
+.dark .fi-tabs-item[aria-selected="true"] {
+    background-color: #1e293b !important;
+    color: #f8fafc !important;
+}
+
+.dark .fi-tabs-item.fi-active .fi-tabs-item-label,
+.dark .fi-tabs-item.fi-active svg,
+.dark .fi-tabs-item[aria-selected="true"] .fi-tabs-item-label,
+.dark .fi-tabs-item[aria-selected="true"] svg {
+    color: #818cf8 !important;
+}
+

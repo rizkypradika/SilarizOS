@@ -27,9 +27,24 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
+            ->viteTheme('resources/css/filament/admin/theme.css')
+            ->brandLogo('')
             ->colors([
                 'primary' => Color::Amber,
             ])
+            ->renderHook(
+                \Filament\View\PanelsRenderHook::USER_MENU_BEFORE,
+                fn (): string => \Illuminate\Support\Facades\Blade::render('@if(auth()->check()) <div style="padding: 0.4rem 0.8rem; margin-right: 0.5rem; border-radius: 9999px; background: #c1121f; border: 1px solid #c1121f; display: flex; align-items: center; gap: 0.5rem; font-weight: 600; font-size: 0.875rem; color: #ffffff;"><span>💰 Rp {{ number_format(auth()->user()->balance ?? 0, 0, ",", ".") }}</span></div> @endif')
+            )
+            ->renderHook(
+                \Filament\View\PanelsRenderHook::SIDEBAR_NAV_START,
+                fn (): string => \Illuminate\Support\Facades\Blade::render('@include("custom-logo")')
+            )
+            ->renderHook(
+                \Filament\View\PanelsRenderHook::HEAD_END,
+                fn (): string => '<link rel="stylesheet" href="' . asset('css/silariz-theme.css') . '">'
+            )
+            ->sidebarCollapsibleOnDesktop()
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
@@ -53,6 +68,10 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+            ])
+            ->plugins([
+                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
+                \Filament\TeamChat\FilamentTeamChatPlugin::make()
             ]);
     }
 }

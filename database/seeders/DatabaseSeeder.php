@@ -15,13 +15,26 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\User::firstOrCreate(
+        // First, run role and permission seeder
+        $this->call(RoleAndPermissionSeeder::class);
+
+        $admin = User::firstOrCreate(
             ['email' => 'adminsilariz@gmail.com'],
             ['name' => 'Owner', 'password' => bcrypt('admin123'), 'role' => 'owner']
         );
-        \App\Models\User::firstOrCreate(
+
+        $customer = User::firstOrCreate(
             ['email' => 'customersilariz@gmail.com'],
             ['name' => 'Customer', 'password' => bcrypt('cust123'), 'role' => 'customer']
         );
+
+        // Assign Spatie roles
+        if (! $admin->hasRole('admin')) {
+            $admin->assignRole('admin');
+        }
+
+        if (! $customer->hasRole('customer')) {
+            $customer->assignRole('customer');
+        }
     }
 }

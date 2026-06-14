@@ -3,10 +3,26 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
+    if (auth()->check()) {
+        $user = auth()->user();
+        if ($user->hasRole('admin')) {
+            return redirect('/admin');
+        } elseif ($user->hasRole('customer')) {
+            return redirect('/customer');
+        }
+    }
     return redirect()->route('filament.auth.auth.login');
 });
 
 Route::get('/auth/login-redirect', function () {
+    if (auth()->check()) {
+        $user = auth()->user();
+        if ($user->hasRole('admin')) {
+            return redirect('/admin');
+        } elseif ($user->hasRole('customer')) {
+            return redirect('/customer');
+        }
+    }
     return redirect()->route('filament.auth.auth.login');
 })->name('login');
 

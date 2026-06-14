@@ -20,6 +20,11 @@ class DepositResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    /** Bypass Shield policy — access controlled by canAccessPanel() */
+    public static function canViewAny(): bool  { return true; }
+    public static function canCreate(): bool   { return true; }
+    public static function canEdit($record): bool   { return true; }
+    public static function canDelete($record): bool { return false; }
     public static function getModelLabel(): string
     {
         return 'Deposit';

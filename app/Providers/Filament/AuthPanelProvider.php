@@ -24,6 +24,7 @@ class AuthPanelProvider extends PanelProvider
             ->id('auth')
             ->path('')
             ->login()
+            ->brandName('Silariz.os')
             ->colors([
                 'primary' => Color::Amber,
             ])

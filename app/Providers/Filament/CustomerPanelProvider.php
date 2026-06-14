@@ -2,11 +2,13 @@
 
 namespace App\Providers\Filament;
 
+use Filament\TeamChat\FilamentTeamChatPlugin;
+
+use App\Filament\Customer\Pages\CustomerDashboard;
 use App\Filament\Customer\Pages\Settings;
 use App\Filament\Customer\Resources\Deposits\DepositResource;
 use App\Filament\Customer\Resources\Orders\OrderResource;
 use App\Filament\Customer\Resources\Products\ProductResource;
-use App\Filament\Customer\Resources\SupportTickets\SupportTicketResource;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Navigation\NavigationBuilder;
 use Filament\Navigation\NavigationGroup;
@@ -34,17 +36,33 @@ class CustomerPanelProvider extends PanelProvider
         return $panel
             ->id('customer')
             ->path('customer')
+            ->viteTheme('resources/css/filament/customer/theme.css')
+            ->brandLogo('')
             ->colors([
                 'primary' => Color::Amber,
             ])
+            ->renderHook(
+                \Filament\View\PanelsRenderHook::USER_MENU_BEFORE,
+                fn (): string => \Illuminate\Support\Facades\Blade::render('@if(auth()->check()) <div style="padding: 0.4rem 0.8rem; margin-right: 0.5rem; border-radius: 9999px; background: #c1121f; border: 1px solid #c1121f; display: flex; align-items: center; gap: 0.5rem; font-weight: 600; font-size: 0.875rem; color: #ffffff;"><span>💰 Rp {{ number_format(auth()->user()->balance ?? 0, 0, ",", ".") }}</span></div> @endif')
+            )
+            ->renderHook(
+                \Filament\View\PanelsRenderHook::SIDEBAR_NAV_START,
+                fn (): string => \Illuminate\Support\Facades\Blade::render('@include("custom-logo")')
+            )
+            ->renderHook(
+                \Filament\View\PanelsRenderHook::HEAD_END,
+                fn (): string => '<link rel="stylesheet" href="' . asset('css/silariz-theme.css') . '">'
+            )
+            ->plugin(FilamentTeamChatPlugin::make())
+            ->sidebarCollapsibleOnDesktop()
             ->navigation(function (NavigationBuilder $builder): NavigationBuilder {
                 return $builder->groups([
                     NavigationGroup::make()
                         ->items([
                             NavigationItem::make('Dashboard')
-                                ->url(fn (): string => Dashboard::getUrl(panel: 'customer'))
+                                ->url(fn (): string => CustomerDashboard::getUrl())
                                 ->icon('heroicon-o-home')
-                                ->isActiveWhen(fn (): bool => request()->routeIs('filament.customer.pages.dashboard')),
+                                ->isActiveWhen(fn (): bool => request()->routeIs('filament.customer.pages.customer-dashboard')),
                         ]),
                     NavigationGroup::make('Pesanan')
                         ->items([
@@ -56,7 +74,7 @@ class CustomerPanelProvider extends PanelProvider
                                 ->url(fn (): string => ProductResource::getUrl('index'))
                                 ->icon('heroicon-o-archive-box')
                                 ->isActiveWhen(fn (): bool => request()->routeIs('filament.customer.resources.products.index')),
-                            NavigationItem::make('Daftar Pesanan Anda')
+                            NavigationItem::make('Pesanan Saya')
                                 ->url(fn (): string => OrderResource::getUrl('index'))
                                 ->icon('heroicon-o-clipboard-document-list')
                                 ->isActiveWhen(fn (): bool => request()->routeIs('filament.customer.resources.orders.index')),
@@ -79,20 +97,16 @@ class CustomerPanelProvider extends PanelProvider
                     NavigationGroup::make('Layanan')
                         ->items([
                             NavigationItem::make('Daftar Produk')
-                                ->url(url('/admin/products'))
+                                ->url(fn (): string => route('filament.customer.resources.catalog-products.index'))
                                 ->icon('heroicon-o-shopping-bag')
-                                ->visible(fn (): bool => auth()->user()?->role === 'owner'),
+                                ->isActiveWhen(fn (): bool => request()->routeIs('filament.customer.resources.catalog-products.index')),
                         ]),
                     NavigationGroup::make('Bantuan')
                         ->items([
-                            NavigationItem::make('Buat Bantuan')
-                                ->url(fn (): string => SupportTicketResource::getUrl('create'))
-                                ->icon('heroicon-o-lifebuoy')
-                                ->isActiveWhen(fn (): bool => request()->routeIs('filament.customer.resources.support-tickets.create')),
-                            NavigationItem::make('Riwayat')
-                                ->url(fn (): string => SupportTicketResource::getUrl('index'))
-                                ->icon('heroicon-o-ticket')
-                                ->isActiveWhen(fn (): bool => request()->routeIs('filament.customer.resources.support-tickets.index')),
+                            NavigationItem::make('Chat Bantuan')
+                                ->url(fn (): string => route('filament.customer.pages.team-chat'))
+                                ->icon('heroicon-o-chat-bubble-left-right')
+                                ->isActiveWhen(fn (): bool => request()->routeIs('filament.customer.pages.team-chat')),
                         ]),
                     NavigationGroup::make('Pengaturan')
                         ->items([
@@ -106,7 +120,7 @@ class CustomerPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/Customer/Resources'), for: 'App\Filament\Customer\Resources')
             ->discoverPages(in: app_path('Filament/Customer/Pages'), for: 'App\Filament\Customer\Pages')
             ->pages([
-                Dashboard::class,
+                CustomerDashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Customer/Widgets'), for: 'App\Filament\Customer\Widgets')
             ->widgets([

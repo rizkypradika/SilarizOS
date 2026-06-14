@@ -21,6 +21,14 @@ class OrderResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    /**
+     * Bypass Shield policy — customer panel uses its own access control
+     * via canAccessPanel() + scoped Eloquent queries.
+     */
+    public static function canViewAny(): bool  { return true; }
+    public static function canCreate(): bool   { return true; }
+    public static function canEdit($record): bool   { return false; }
+    public static function canDelete($record): bool { return false; }
     public static function getModelLabel(): string
     {
         return 'Pesanan Anda';

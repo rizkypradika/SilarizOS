@@ -1,0 +1,25 @@
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+@source '../../../../app/Filament/**/*';
+@source '../../../../resources/views/filament/**/*';
+@source '../../../../vendor/qalainau/filament-team-chat/resources/views/**/*';
+
+/* Custom Active Tab Styling to match Sidebar (Red Pill) */
+.fi-tabs-item[aria-selected="true"] {
+    background-color: rgb(var(--primary-600)) !important;
+    color: white !important;
+    border-radius: 9999px !important;
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+}
+
+.fi-tabs-item[aria-selected="true"] .fi-tabs-item-label,
+.fi-tabs-item[aria-selected="true"] svg {
+    color: white !important;
+}
+
+.dark .fi-tabs-item[aria-selected="true"] {
+    background-color: rgb(var(--primary-500)) !important;
+}
