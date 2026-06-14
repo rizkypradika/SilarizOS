@@ -11,8 +11,9 @@ class OrdersTable
     {
         return $table
             ->columns([
-                TextColumn::make('id')
+                TextColumn::make('order_number')
                     ->label('ID Pemesanan')
+                    ->searchable()
                     ->sortable(),
                 TextColumn::make('items_summary')
                     ->label('Produk Dipesan')

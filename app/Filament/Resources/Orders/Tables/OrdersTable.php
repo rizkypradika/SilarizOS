@@ -13,8 +13,9 @@ class OrdersTable
     {
         return $table
             ->columns([
-                \Filament\Tables\Columns\TextColumn::make('id')
+                \Filament\Tables\Columns\TextColumn::make('order_number')
                     ->label('ID Pemesanan')
+                    ->searchable()
                     ->sortable(),
                 \Filament\Tables\Columns\TextColumn::make('user.name')
                     ->label('Customer')

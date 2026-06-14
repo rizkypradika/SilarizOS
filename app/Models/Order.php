@@ -14,6 +14,15 @@ class Order extends Model
         'account_info' => 'array',
     ];
 
+    protected static function booted()
+    {
+        static::creating(function ($order) {
+            $lastOrder = self::orderBy('id', 'desc')->first();
+            $nextId = $lastOrder ? $lastOrder->id + 1 : 1;
+            $order->order_number = 'SLRIZ' . str_pad($nextId, 4, '0', STR_PAD_LEFT);
+        });
+    }
+
     public function items()
     {
         return $this->hasMany(OrderItem::class);
